@@ -1,0 +1,14 @@
+.navbar {
+  height: 60px;
+  background-color: #fff;
+  padding: 0 1.5rem;
+  display: flex;
+  align-items: center;
+  background-color: rgb(34, 34, 123);
+  .logo {
+    font-family: "Cookie", cursive;
+    font-size: 2rem;
+    color: #fff;
+    text-transform: capitalize;
+  }
+}
