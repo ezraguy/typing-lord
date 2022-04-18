@@ -1,12 +1,8 @@
-import React, { useState, useId, useRef } from "react";
+import React, { useState, useId, useRef, useEffect } from "react";
 import styles from "../scss/Words.module.scss";
 
-const Words = () => {
-  const [words, setWords] = useState([
-    { value: "dog", style: "", isCurrent: true },
-    { value: "cat", style: "", isCurrent: false },
-    { value: "bird", style: "", isCurrent: false },
-  ]);
+const Words = ({ data }) => {
+  const [words, setWords] = useState([]);
   const [userInput, setUserInput] = useState("");
   const [currIndex, setCurrIndex] = useState(0);
   const id = useId();
@@ -49,6 +45,18 @@ const Words = () => {
     wordsTemp[currIndex + 1].isCurrent = true;
     setWords(wordsTemp);
   };
+  const init = () => {
+    let wordsTemp = [...words];
+    data.map((word, index) => {
+      let wordObj = { value: word, style: "", isCurrent: index === 0 ? true : false };
+      wordsTemp.push(wordObj);
+    });
+    wordsTemp.length = 50;
+    setWords(wordsTemp);
+  };
+  useEffect(() => {
+    init();
+  }, []);
   return (
     <div className={styles.words}>
       <div className={styles.correctWordsWrap}>
@@ -61,19 +69,24 @@ const Words = () => {
       </div>
 
       <div className={styles.wordsWrap}>
-        {words.map((word) => (
-          <span
-            key={`${id}-${word.value}`}
+        {words.map((word, index) => (
+          <div
+            key={index}
             className={`${styles.word} ${word.isCurrent ? styles.current : ""} ${
               word.style === "wrong" && styles.wrong
             }
             ${word.style === "correct" && styles.correct}`}
           >
             {word.value}
-          </span>
+          </div>
         ))}
       </div>
-      <input type='text' value={userInput} onChange={(e) => checkUserInput(e)} />
+      <input
+        type='text'
+        className={styles.wordsInput}
+        value={userInput}
+        onChange={(e) => checkUserInput(e)}
+      />
     </div>
   );
 };
